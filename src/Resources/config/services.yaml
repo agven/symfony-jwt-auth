@@ -1,0 +1,41 @@
+imports:
+    - { resource: interfaces.yaml }
+
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: true
+        public: false
+
+    Agven\JWTAuthBundle\Security\TokenAuthenticator:
+        autowire: true
+        public: true
+        arguments:
+            $userIdentity: '%agven_jwt_auth.identity%'
+
+    Agven\JWTAuthBundle\Services\Factory\Token:
+        arguments:
+            $algorithm:     '%agven_jwt_auth.encoder.signature_algorithm%'
+            $tokenLifeTime: '%agven_jwt_auth.token_ttl%'
+            $userIdentity:  '%agven_jwt_auth.identity%'
+
+    Agven\JWTAuthBundle\Services\Manager\Token:
+        autowire: true
+        public: true
+
+    Agven\JWTAuthBundle\Services\Manager\RefreshToken:
+        autowire: true
+        public: true
+        arguments:
+            $tokenLength: '%agven_jwt_auth.encoder.refresh_token_length%'
+
+    Agven\JWTAuthBundle\Services\KeyReader:
+        arguments:
+            $privateKeyPath: '%agven_jwt_auth.private_key%'
+            $publicKeyPath:  '%agven_jwt_auth.public_key%'
+            $passPhrase:     '%agven_jwt_auth.pass_phrase%'
+
+    Agven\JWTAuthBundle\Services\TokenExtractor:
+        arguments:
+            $name: '%agven_jwt_auth.authorization_header.name%'
+            $prefix:  '%agven_jwt_auth.authorization_header.prefix%'

@@ -1,0 +1,3 @@
+services:
+    Agven\JWTAuthBundle\Core\Services\Manager\RefreshToken: '@Agven\JWTAuthBundle\Services\Manager\RefreshToken'
+    Agven\JWTAuthBundle\Core\Services\Manager\Token: '@Agven\JWTAuthBundle\Services\Manager\Token'

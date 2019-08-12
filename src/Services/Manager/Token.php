@@ -2,7 +2,7 @@
 
 namespace Agven\JWTAuthBundle\Services\Manager;
 
-use Agven\JWTAuthBundle\Core\Services\Manager\Token as TokenManagerInterface;
+use Agven\JWTAuthBundle\Core\Services\Manager\TokenInterface as TokenManagerInterface;
 use Agven\JWTAuthBundle\Core\ValueObject\Token\Payload as TokenPayload;
 use Agven\JWTAuthBundle\Services\Factory\Token as tokenFactory;
 use Agven\JWTAuthBundle\Services\KeyReader;
@@ -16,15 +16,17 @@ class Token implements TokenManagerInterface
     private $keyReader;
     private $tokenFactory;
     private $tokenPayload;
+    private $tokenLength;
 
-    public function __construct(KeyReader $keyReader, TokenFactory $tokenFactory)
+    public function __construct(KeyReader $keyReader, TokenFactory $tokenFactory, int $tokenLength)
     {
         $this->header = $tokenFactory->createHeader();
         $this->keyReader = $keyReader;
         $this->tokenFactory = $tokenFactory;
+        $this->tokenLength = $tokenLength;
     }
 
-    public function create(UserInterface $user, array $payload = []): string
+    public function createAuthToken(UserInterface $user, array $payload = []): string
     {
         $tokenPayload = $this->createTokenPayload($user);
         $key = $this->keyReader->getPrivateKey();
@@ -36,7 +38,14 @@ class Token implements TokenManagerInterface
         return JWT::encode($payload, $key, $this->header->getAlgorithm());
     }
 
-    public function decode(string $rawToken): \stdClass
+    public function createRefreshToken(): string
+    {
+        $bytes = openssl_random_pseudo_bytes($this->tokenLength);
+
+        return bin2hex($bytes);
+    }
+
+    public function decodeAuthToken(string $rawToken): \stdClass
     {
         $key = $this->keyReader->getPublicKey();
 

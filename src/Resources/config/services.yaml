@@ -22,10 +22,6 @@ services:
     Agven\JWTAuthBundle\Services\Manager\Token:
         autowire: true
         public: true
-
-    Agven\JWTAuthBundle\Services\Manager\RefreshToken:
-        autowire: true
-        public: true
         arguments:
             $tokenLength: '%agven_jwt_auth.encoder.refresh_token_length%'
 

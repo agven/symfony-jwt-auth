@@ -2,7 +2,7 @@
 
 namespace Agven\JWTAuthBundle\Security;
 
-use Agven\JWTAuthBundle\Core\Services\Manager\Token as TokenManagerInterface;
+use Agven\JWTAuthBundle\Core\Services\Manager\TokenInterface as TokenManagerInterface;
 use Agven\JWTAuthBundle\Core\ValueObject\RawToken;
 use Agven\JWTAuthBundle\Services\TokenExtractor;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,11 +37,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $token = $this->tokenExtractor->extract($request);
         if (!$token) {
-            throw new AuthenticationException('Authentication header does not exists or empty.');
+            throw new \UnexpectedValueException('Authentication header does not exists or invalid.');
         }
 
         try {
-            $payload = $this->tokenManager->decode($token);
+            $payload = $this->tokenManager->decodeAuthToken($token);
             return new RawToken($token, $payload);
         } catch (\Exception $e) {
             throw new AuthenticationException(
@@ -122,6 +122,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return true;
+        return $this->tokenExtractor->hasAuthHeader($request);
     }
 }

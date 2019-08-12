@@ -2,7 +2,7 @@
 
 namespace Agven\JWTAuthBundle\Core\ValueObject\Token;
 
-class Header
+final class Header
 {
     /**
      * Identifies which algorithm is used to generate the signature

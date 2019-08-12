@@ -34,4 +34,9 @@ class TokenExtractor
 
         return $token;
     }
+
+    public function hasAuthHeader(Request $request): bool
+    {
+        return $request->headers->has($this->name);
+    }
 }

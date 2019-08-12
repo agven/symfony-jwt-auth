@@ -4,7 +4,7 @@ Lightweight JWT Authentication Bundle. The bundle also provides Refresh and Acce
 
 ## Installation
 
-    php composer.phar require "agven/symfony-jwt-auth"
+    composer require agven/symfony-jwt-auth
     
 or add [`agven/symfony-jwt-auth`](https://github.com/agven/symfony-jwt-auth)
 to your `composer.json` file. This bundle using the [`firebase/php-jwt`](https://github.com/firebase/php-jwt) 
@@ -36,7 +36,7 @@ You can get the token for user with service like this:
 
 ```php
 // ...
-use Agven\JWTAuthBundle\Core\Services\Manager\Token as TokenManagerInterface;
+use Agven\JWTAuthBundle\Core\Services\Manager\TokenInterface as TokenManagerInterface;
 
 class AuthManager
 {
@@ -54,51 +54,11 @@ class AuthManager
             throw new EntityNotFoundException('User not found.');
         }
         // ...
-        $token = $this->tokenManager->create($user);
+        $token = $this->tokenManager->createAuthToken($user);
+        //$refreshToken = $this->tokenManager->createRefreshToken(); // If you want to use refresh token
         $payload = $this->tokenManager->getTokenPayload();
         // ...
     }
-```
-If you want use refresh and access token
-```php
-// ...
-use Agven\JWTAuthBundle\Core\Services\Manager\RefreshToken as TokenManagerInterface;
-
-class AuthManager
-{
-    private $tokenManager;
-    
-    public function __construct(TokenManagerInterface $tokenManager) 
-    {
-        $this->tokenManager = $tokenManager;
-    }
-    
-    public function auth(UserAuthRequest $userAuth)
-    {
-        $user = $this->userRepository->findOneByUsername($userAuth->username);
-        if (!$user) {
-            throw new EntityNotFoundException('User not found.');
-        }
-        // ...
-        $accessToken = $this->tokenManager->createAccess($user);
-        $refreshToken = $this->tokenManager->createRefresh();
-        $payload = $this->tokenManager->getTokenPayload();
-        // ...
-    }
-
-    public function refreshToken(string $refreshToken)
-    {
-        $user = $this->userRepository->findOneByToken($refreshToken);
-        if (!$user) {
-            throw new NotFoundException('User not found.');
-        }
-        // ...
-        $accessToken = $this->tokenManager->createAccess($user);
-        $refreshToken = $this->tokenManager->createRefresh();
-        $payload = $this->tokenManager->getTokenPayload();
-        // ...
-    }
-
 ```
 
 ## To Do

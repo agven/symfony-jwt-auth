@@ -47,17 +47,26 @@ class AuthManager
         $this->tokenManager = $tokenManager;
     }
     
-    public function auth(UserAuthRequest $userAuth)
+    public function auth(string $username, string $password)
     {
-        $user = $this->userRepository->findOneByUsername($userAuth->username);
+        $user = $this->userRepository->findOneByUsername($username);
         if (!$user) {
             throw new EntityNotFoundException('User not found.');
         }
+        
         // ...
-        $token = $this->tokenManager->createAuthToken($user);
-        //$refreshToken = $this->tokenManager->createRefreshToken(); // If you want to use refresh token
-        $payload = $this->tokenManager->getTokenPayload();
+        // Validate password or todo something else
         // ...
+        
+        $accessToken = $this->tokenManager->createAccessToken($user);
+        $token = $accessToken->geToken();
+        $payload = $accessToken->getPayload()
+        
+        // ...
+        // If you want to use refresh token
+        // ...
+        $refreshToken = $this->tokenManager->createRefreshToken();
+        $token = $refreshToken->getToken();
     }
 ```
 

@@ -5,7 +5,7 @@ namespace Agven\JWTAuthBundle\Services;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class TokenExtractor
+class RequestTokenExtractor
 {
     /**
      * Authorization header name

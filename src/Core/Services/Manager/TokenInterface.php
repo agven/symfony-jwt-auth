@@ -2,13 +2,36 @@
 
 namespace Agven\JWTAuthBundle\Core\Services\Manager;
 
-use Agven\JWTAuthBundle\Core\ValueObject\Token\Payload as TokenPayload;
+use Agven\JWTAuthBundle\Core\ValueObject\AccessToken;
+use Agven\JWTAuthBundle\Core\ValueObject\RefreshToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 interface TokenInterface
 {
-    public function createAuthToken(UserInterface $user, array $payload = []): string;
-    public function createRefreshToken(): string;
-    public function decodeAuthToken(string $rawToken): \stdClass;
-    public function getTokenPayload(): TokenPayload;
+    /**
+     * Returns access token
+     *
+     * @param UserInterface $user
+     * @param array $payload
+     *
+     * @return AccessToken
+     */
+    public function createAccessToken(UserInterface $user, array $payload = []): AccessToken;
+
+    /**
+     * Returns refresh token
+     *
+     * @return RefreshToken
+     */
+    public function createRefreshToken(): RefreshToken;
+
+    /**
+     * Decodes a JWT token into a PHP object.
+     *
+     * @param string $rawToken
+     *
+     * @return \stdClass
+     * @throws \Exception
+     */
+    public function decodeToken(string $rawToken): \stdClass;
 }

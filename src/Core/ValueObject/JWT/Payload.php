@@ -1,12 +1,13 @@
 <?php
 
-namespace Agven\JWTAuthBundle\Core\ValueObject\Token;
+namespace Agven\JWTAuthBundle\Core\ValueObject\JWT;
 
 final class Payload
 {
     /**
      * Expiration Time
      * Identifies the expiration time on and after which the JWT must not be accepted for processing
+     *
      * @var int timestamp
      */
     private $exp;
@@ -14,6 +15,7 @@ final class Payload
     /**
      * JWT ID
      * Case sensitive unique identifier of the token even among different issuers
+     *
      * @var string
      */
     private $jti;
@@ -21,6 +23,7 @@ final class Payload
     /**
      * Issued at
      * Identifies the time at which the JWT was issued
+     *
      * @var int timestamp
      */
     private $iat;
@@ -28,18 +31,21 @@ final class Payload
     /**
      * Not Before
      * Identifies the time on which the JWT will start to be accepted for processing
+     *
      * @var int timestamp
      */
     private $nbf;
 
     /**
      * User identity field
+     *
      * @var string
      */
     private $userIdentityField;
 
     /**
      * User identity value
+     *
      * @var string
      */
     private $userIdentityValue;
@@ -60,6 +66,7 @@ final class Payload
 
     /**
      * @param int $exp
+     *
      * @return Payload
      */
     public function setExp(int $exp): Payload
@@ -87,6 +94,7 @@ final class Payload
 
     /**
      * @param int $iat
+     *
      * @return Payload
      */
     public function setIat(int $iat): Payload
@@ -106,6 +114,7 @@ final class Payload
 
     /**
      * @param int $nbf
+     *
      * @return Payload
      */
     public function setNbf(int $nbf): Payload
@@ -125,6 +134,7 @@ final class Payload
 
     /**
      * @param string $fieldName
+     *
      * @return Payload
      */
     public function setUserIdentityField(string $fieldName): Payload
@@ -146,6 +156,7 @@ final class Payload
 
     /**
      * @param string|int (non-null) $name
+     *
      * @return Payload
      */
     public function setUserIdentityValue($value): Payload

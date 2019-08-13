@@ -13,7 +13,7 @@ services:
         arguments:
             $userIdentity: '%agven_jwt_auth.identity%'
 
-    Agven\JWTAuthBundle\Services\Factory\Token:
+    Agven\JWTAuthBundle\Services\Factory\JWT:
         arguments:
             $algorithm:     '%agven_jwt_auth.encoder.signature_algorithm%'
             $tokenLifeTime: '%agven_jwt_auth.token_ttl%'
@@ -31,7 +31,7 @@ services:
             $publicKeyPath:  '%agven_jwt_auth.public_key%'
             $passPhrase:     '%agven_jwt_auth.pass_phrase%'
 
-    Agven\JWTAuthBundle\Services\TokenExtractor:
+    Agven\JWTAuthBundle\Services\RequestTokenExtractor:
         arguments:
             $name: '%agven_jwt_auth.authorization_header.name%'
             $prefix:  '%agven_jwt_auth.authorization_header.prefix%'

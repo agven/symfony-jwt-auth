@@ -3,8 +3,7 @@
 namespace Agven\JWTAuthBundle\Security;
 
 use Agven\JWTAuthBundle\Core\Services\Manager\TokenInterface as TokenManagerInterface;
-use Agven\JWTAuthBundle\Core\ValueObject\RawToken;
-use Agven\JWTAuthBundle\Services\TokenExtractor;
+use Agven\JWTAuthBundle\Services\RequestTokenExtractor;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +21,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function __construct(
         TokenManagerInterface $tokenManager,
-        TokenExtractor $tokenExtractor,
+        RequestTokenExtractor $tokenExtractor,
         string $userIdentity
     ) {
         $this->tokenManager = $tokenManager;
@@ -41,7 +40,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         try {
-            $payload = $this->tokenManager->decodeAuthToken($token);
+            $payload = $this->tokenManager->decodeToken($token);
             return new RawToken($token, $payload);
         } catch (\Exception $e) {
             throw new AuthenticationException(

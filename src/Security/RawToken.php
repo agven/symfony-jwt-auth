@@ -1,6 +1,6 @@
 <?php
 
-namespace Agven\JWTAuthBundle\Core\ValueObject;
+namespace Agven\JWTAuthBundle\Security;
 
 class RawToken
 {

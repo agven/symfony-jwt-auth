@@ -3,10 +3,10 @@
 namespace Agven\JWTAuthBundle\Services\Manager;
 
 use Agven\JWTAuthBundle\Core\Services\Manager\TokenInterface as TokenManagerInterface;
-use Agven\JWTAuthBundle\Core\ValueObject\Token\Payload as TokenPayload;
-use Agven\JWTAuthBundle\Services\Factory\Token as tokenFactory;
+use Agven\JWTAuthBundle\Core\ValueObject\AccessToken;
+use Agven\JWTAuthBundle\Core\ValueObject\RefreshToken;
+use Agven\JWTAuthBundle\Services\Factory\JWT as JWTFactory;
 use Agven\JWTAuthBundle\Services\KeyReader;
-use Agven\JWTAuthBundle\Services\TokenSetting;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -15,10 +15,9 @@ class Token implements TokenManagerInterface
     private $header;
     private $keyReader;
     private $tokenFactory;
-    private $tokenPayload;
     private $tokenLength;
 
-    public function __construct(KeyReader $keyReader, TokenFactory $tokenFactory, int $tokenLength)
+    public function __construct(KeyReader $keyReader, JWTFactory $tokenFactory, int $tokenLength)
     {
         $this->header = $tokenFactory->createHeader();
         $this->keyReader = $keyReader;
@@ -26,47 +25,38 @@ class Token implements TokenManagerInterface
         $this->tokenLength = $tokenLength;
     }
 
-    public function createAuthToken(UserInterface $user, array $payload = []): string
+    /**
+     * @inheritdoc
+     */
+    public function createAccessToken(UserInterface $user, array $payload = []): AccessToken
     {
-        $tokenPayload = $this->createTokenPayload($user);
+        $tokenPayload = $this->tokenFactory->createPayload($user);
         $key = $this->keyReader->getPrivateKey();
         $payload = array_merge(
             $tokenPayload->asArray(),
             $payload
         );
 
-        return JWT::encode($payload, $key, $this->header->getAlgorithm());
+        $token = JWT::encode($payload, $key, $this->header->getAlgorithm());
+
+        return new AccessToken(
+            $this->header,
+            $tokenPayload,
+            $token
+        );
     }
 
-    public function createRefreshToken(): string
+    public function createRefreshToken(): RefreshToken
     {
-        $bytes = openssl_random_pseudo_bytes($this->tokenLength);
+        $token = bin2hex(openssl_random_pseudo_bytes($this->tokenLength));
 
-        return bin2hex($bytes);
+        return new RefreshToken($token);
     }
 
-    public function decodeAuthToken(string $rawToken): \stdClass
+    public function decodeToken(string $rawToken): \stdClass
     {
         $key = $this->keyReader->getPublicKey();
 
         return JWT::decode($rawToken, $key, [$this->header->getAlgorithm()]);
-    }
-
-    public function getTokenPayload(): TokenPayload
-    {
-        if (!$this->tokenPayload) {
-            throw new \RuntimeException('Token payload does not exists.');
-        }
-
-        return $this->tokenPayload;
-    }
-
-    private function createTokenPayload(UserInterface $user): TokenPayload
-    {
-        if (!$this->tokenPayload) {
-            $this->tokenPayload = $this->tokenFactory->createPayload($user);
-        }
-
-        return $this->tokenPayload;
     }
 }

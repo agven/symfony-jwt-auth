@@ -1,6 +1,6 @@
 <?php
 
-namespace Agven\JWTAuthBundle\Core\ValueObject\Token;
+namespace Agven\JWTAuthBundle\Core\ValueObject\JWT;
 
 final class Header
 {

@@ -1,12 +1,13 @@
 <?php
 
-namespace Agven\JWTAuthBundle\Core\ValueObject\JWT;
+namespace Agven\JWTAuthBundle\Core\ValueObject\Token\Structure;
 
 final class Header
 {
     /**
      * Identifies which algorithm is used to generate the signature
-     * @var string Message authentication code algorithm
+     *
+     * @var string Authentication code algorithm
      */
     private $algorithm;
 

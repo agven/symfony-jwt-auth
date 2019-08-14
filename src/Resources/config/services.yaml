@@ -13,7 +13,9 @@ services:
         arguments:
             $userIdentity: '%agven_jwt_auth.identity%'
 
-    Agven\JWTAuthBundle\Services\Factory\JWT:
+    Agven\JWTAuthBundle\Services\Factory\Token: ~
+
+    Agven\JWTAuthBundle\Services\Factory\TokenStructure:
         arguments:
             $algorithm:     '%agven_jwt_auth.encoder.signature_algorithm%'
             $tokenLifeTime: '%agven_jwt_auth.token_ttl%'
@@ -23,7 +25,7 @@ services:
         autowire: true
         public: true
         arguments:
-            $tokenLength: '%agven_jwt_auth.encoder.refresh_token_length%'
+            $refreshTokenLength: '%agven_jwt_auth.encoder.refresh_token_length%'
 
     Agven\JWTAuthBundle\Services\KeyReader:
         arguments:

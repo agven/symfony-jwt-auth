@@ -37,6 +37,7 @@ You can get the token for user with service like this:
 ```php
 // ...
 use Agven\JWTAuthBundle\Core\Services\Manager\TokenInterface as TokenManagerInterface;
+// ...
 
 class AuthManager
 {
@@ -58,15 +59,7 @@ class AuthManager
         // Validate password or todo something else
         // ...
         
-        $accessToken = $this->tokenManager->createAccessToken($user);
-        $token = $accessToken->geToken();
-        $payload = $accessToken->getPayload()
-        
-        // ...
-        // If you want to use refresh token
-        // ...
-        $refreshToken = $this->tokenManager->createRefreshToken();
-        $token = $refreshToken->getToken();
+        $token = $this->tokenManager->createAccessToken($user);
     }
 ```
 

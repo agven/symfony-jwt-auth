@@ -2,8 +2,8 @@
 
 namespace Agven\JWTAuthBundle\Core\Services\Manager;
 
-use Agven\JWTAuthBundle\Core\ValueObject\AccessToken;
-use Agven\JWTAuthBundle\Core\ValueObject\RefreshToken;
+use Agven\JWTAuthBundle\Core\ValueObject\Token\Access as AccessToken;
+use Agven\JWTAuthBundle\Core\ValueObject\Token\Refresh as RefreshToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 interface TokenInterface

@@ -2,12 +2,12 @@
 
 namespace Agven\JWTAuthBundle\Services\Factory;
 
-use Agven\JWTAuthBundle\Core\ValueObject\JWT\Header as TokenHeader;
-use Agven\JWTAuthBundle\Core\ValueObject\JWT\Payload as TokenPayload;
+use Agven\JWTAuthBundle\Core\ValueObject\Token\Structure\Header as TokenHeader;
+use Agven\JWTAuthBundle\Core\ValueObject\Token\Structure\Payload as TokenPayload;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class JWT
+class TokenStructure
 {
     private $algorithm;
     private $tokenLifeTime;

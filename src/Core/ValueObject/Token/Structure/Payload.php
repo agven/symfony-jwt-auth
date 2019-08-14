@@ -1,9 +1,14 @@
 <?php
 
-namespace Agven\JWTAuthBundle\Core\ValueObject\JWT;
+namespace Agven\JWTAuthBundle\Core\ValueObject\Token\Structure;
 
 final class Payload
 {
+    private const TOKEN_KEY_JTI = 'jti';
+    private const TOKEN_KEY_EXP = 'exp';
+    private const TOKEN_KEY_IAT = 'iat';
+    private const TOKEN_KEY_NBF = 'nbf';
+
     /**
      * Expiration Time
      * Identifies the expiration time on and after which the JWT must not be accepted for processing
@@ -49,6 +54,11 @@ final class Payload
      * @var string
      */
     private $userIdentityValue;
+
+    /**
+     * @var array
+     */
+    private $userPayload = [];
 
     public function __construct()
     {
@@ -166,14 +176,24 @@ final class Payload
         return $this;
     }
 
+    public function addUserPayload(array $payload): Payload
+    {
+        $this->userPayload = array_merge(
+            $this->userPayload,
+            $payload
+        );
+
+        return $this;
+    }
+
     public function asArray()
     {
-        return [
+        return array_merge($this->userPayload, [
             $this->getUserIdentityField() => $this->getUserIdentityValue(),
-            'exp' => $this->getExp(),
-            'nbf' => $this->getNbf(),
-            'iat' => $this->getIat(),
-            'jti' => $this->getJti(),
-        ];
+            self::TOKEN_KEY_JTI => $this->getJti(),
+            self::TOKEN_KEY_EXP => $this->getExp(),
+            self::TOKEN_KEY_IAT => $this->getIat(),
+            self::TOKEN_KEY_NBF => $this->getNbf(),
+        ]);
     }
 }
